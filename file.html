@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Panzz Suka Bola | Fansite TikTok</title>
+  <meta name="description" content="Fansite sepak bola dengan video dari TikTok @panzzsukabola, menampilkan Ronaldo, MU, Thierry Henry, dan Arsenal." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#e11d48; --light:#f1f5f9;
+      font-family:'Poppins',sans-serif;
+    }
+    *{box-sizing:border-box; transition: all 0.28s ease;}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--light);
+      text-align:center;
+      min-height:100vh;
+      background:
+        linear-gradient(rgba(0,0,0,0.70), rgba(0,0,0,0.92)),
+        url('https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg') center/cover fixed no-repeat;
+      opacity:0;
+      animation:fadeIn 1.2s forwards;
+    }
+    @keyframes fadeIn{ to{opacity:1} }
+    /* subtle Henry image overlay (faded) */
+    body::after{
+      content:'';
+      position:fixed;
+      inset:0;
+      background:url('https://upload.wikimedia.org/wikipedia/commons/7/7a/Thierry_Henry_2012.jpg') right/contain no-repeat;
+      opacity:0.14;
+      pointer-events:none;
+    }
+
+    header{
+      padding:18px;
+      background:rgba(0,0,0,0.54);
+      backdrop-filter: blur(6px);
+      position:sticky; top:0; z-index:5;
+      display:flex; align-items:center; gap:12px; justify-content:center;
+    }
+    header img{ width:64px; height:64px; transition: transform .35s; border-radius:10px; background:#fff; padding:6px; }
+    header img:hover{ transform: rotate(12deg) scale(1.05); }
+    header .title{ text-align:left; }
+    header h1{ margin:0; font-size:20px; color:var(--accent); letter-spacing:0.4px; text-shadow:0 0 12px rgba(225,29,72,0.45); }
+    header p{ margin:0; font-size:12px; color:#d4dbe6; opacity:0.9; }
+
+    main{ max-width:920px; margin:28px auto; padding:18px; }
+    .card{
+      background:rgba(0,0,0,0.56);
+      padding:18px; border-radius:14px;
+      box-shadow:0 10px 40px rgba(2,6,23,0.6);
+      transform:translateY(18px); opacity:0; animation:cardIn .9s 0.25s forwards;
+    }
+    @keyframes cardIn{ to{transform:none;opacity:1} }
+
+    .bio h2{ margin:6px 0 2px 0; font-size:18px; }
+    .bio p{ margin:0 0 12px 0; color:#cbd6ea; font-size:14px; }
+
+    .btn{
+      display:inline-block; text-decoration:none; color:#071025;
+      background:var(--accent); padding:10px 18px; border-radius:999px; font-weight:700;
+      box-shadow:0 8px 22px rgba(225,29,72,0.16);
+    }
+    .btn.ghost{ background:transparent; color:#d6dbe8; border:1px solid rgba(255,255,255,0.06); box-shadow:none; }
+
+    .controls{ margin-top:12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+    .tiktok-wrap{ margin-top:20px; border-radius:12px; overflow:hidden; }
+    footer{ margin-top:22px; color:#bfcbe0; font-size:13px; opacity:0.9; }
+
+    /* small floating notifier */
+    .note{
+      position:fixed; right:18px; bottom:18px; background:rgba(0,0,0,0.6);
+      color:#fff; padding:10px 12px; border-radius:10px; font-size:13px; z-index:40;
+      box-shadow:0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    /* responsive */
+    @media (max-width:720px){
+      header{ padding:12px; }
+      header img{ width:52px; height:52px; }
+      main{ padding:12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg" alt="Arsenal Logo" loading="lazy">
+    <div class="title">
+      <h1>Panzz Suka Bola ⚽</h1>
+      <p>Fansite TikTok • Ronaldo • MU • Thierry Henry • Arsenal</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="card bio" role="region" aria-label="Bio">
+      <h2>@panzzsukabola</h2>
+      <p>Pecinta sepak bola sejati! Konten TikTok fokus seputar momen-momen legendaris, highlight, dan reaksi. Klik tombol untuk buka TikTok atau kontrol chant Arsenal.</p>
+
+      <div class="controls">
+        <a class="btn" href="https://www.tiktok.com/@panzzsukabola?_t=ZS-91028rh93sV&_r=1" target="_blank" rel="noopener">Lihat di TikTok</a>
+        <button id="toggleChant" class="btn ghost" aria-pressed="false">Try Play Chant</button>
+      </div>
+
+      <!-- audio element (keamanan autoplay: tidak autoplay di atribut) -->
+      <audio id="chant" loop preload="auto" crossorigin="anonymous">
+        <!-- public-domain / archive.org sample; jika kamu ganti, pastikan hosting file punya CORS jika embed di domain lain -->
+        <source src="https://archive.org/download/arsenal-fc-chant/Arsenal%20FC%20Chant.mp3" type="audio/mpeg">
+        Browser kamu tidak mendukung audio.
+      </audio>
+      <p style="font-size:13px;color:#c6d6ef;margin-top:10px">🎵 Chant Arsenal akan dicoba diputar otomatis jika browser memperbolehkan — ada tombol untuk kontrol manual.</p>
+    </div>
+
+    <div class="card tiktok-wrap" style="margin-top:18px; text-align:center;">
+      <!-- TikTok embed: menampilkan profile/embed area; TikTok script akan handle -->
+      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@panzzsukabola" data-unique-id="panzzsukabola" data-embed-from="oembed" style="max-width:605px;min-width:300px;margin:0 auto;padding:16px;">
+        <section> <a target="_blank" title="@panzzsukabola" href="https://www.tiktok.com/@panzzsukabola?refer=embed">@panzzsukabola</a> </section>
+      </blockquote>
+      <script async src="https://www.tiktok.com/embed.js"></script>
+    </div>
+
+    <footer>
+      © 2025 Fansite PanzzSukaBola — Tidak berafiliasi dengan TikTok atau klub mana pun.
+    </footer>
+  </main>
+
+  <!-- Inline JS (single file) - siap di-deploy ke Vercel -->
+  <script>
+    (function(){
+      const audio = document.getElementById('chant');
+      const btn = document.getElementById('toggleChant');
+      const STORAGE = 'panzz_chant_pref';
+      let userPref = localStorage.getItem(STORAGE); // '1' => play, '0' => pause
+
+      // helper: show temporary note
+      function showNote(text){
+        const n = document.createElement('div');
+        n.className = 'note';
+        n.textContent = text;
+        document.body.appendChild(n);
+        setTimeout(()=> n.remove(), 1400);
+      }
+
+      // update button label and aria
+      function updateBtn(){
+        if(audio.paused){
+          btn.textContent = 'Play Chant';
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed','false');
+        } else {
+          btn.textContent = 'Pause Chant';
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed','true');
+        }
+      }
+
+      // try autoplay once on load (many browsers block it)
+      async function tryAutoplay(){
+        if(!audio) return;
+        // if user previously chose play, honor that
+        if(userPref === '1'){
+          try {
+            await audio.play();
+            updateBtn();
+            showNote('Chant diputar (preferensi tersimpan)');
+            return;
+          } catch(e){
+            console.log('Autoplay blocked (stored preference):', e);
+          }
+        }
+        // otherwise attempt a soft autoplay (may be blocked)
+        try {
+          await audio.play();
+          // if succeeded, store preference
+          localStorage.setItem(STORAGE,'1');
+          updateBtn();
+          showNote('Chant diputar otomatis');
+        } catch(e){
+          // autoplay diblokir — biarkan tombol manual
+          console.log('Autoplay dibloked or requires gesture:', e);
+          updateBtn();
+        }
+      }
+
+      // toggle function for button
+      btn.addEventListener('click', async function(){
+        if(audio.paused){
+          try {
+            await audio.play();
+            localStorage.setItem(STORAGE,'1');
+            showNote('Chant diputar');
+          } catch(e){
+            console.warn('Play failed:', e);
+            showNote('Tidak bisa memutar — cobalah klik halaman atau cek izin browser');
+          }
+        } else {
+          audio.pause();
+          localStorage.setItem(STORAGE,'0');
+          showNote('Chant dijeda');
+        }
+        updateBtn();
+      });
+
+      // keyboard shortcut: M to mute/unmute
+      document.addEventListener('keydown', (ev)=>{
+        if(ev.key.toLowerCase()==='m'){
+          if(!audio) return;
+          audio.muted = !audio.muted;
+          showNote(audio.muted ? 'Muted' : 'Unmuted');
+        }
+      });
+
+      // initial UI
+      updateBtn();
+      // try autoplay after DOM ready + small delay
+      window.addEventListener('load', ()=> setTimeout(tryAutoplay, 350));
+    })();
+  </script>
+</body>
+</html>
